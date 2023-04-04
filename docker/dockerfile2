@@ -1,0 +1,26 @@
+# Dockerfile обязательно должен находиться рядом с pom.xml и иметь имя dockerfile2
+#step 1
+# базовый образ, содержащий среду Java времени выполнения
+FROM openjdk:11-slim as build
+
+# добавляем информацию о владельце
+LABEL maintainer="ivvasch <ivvasch@gmail.com>"
+# файл jar приложения
+ARG JAR_FILE
+# добавить файл jar приложения в контейнер
+COPY ${JAR_FILE} app.jar
+# распаковать файл jar (распаковывает app.jar скопированный ранее, в файловую систему образа)
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf /app.jar)
+
+#step 2
+# та же среда Java времени выполнения (этот новый образ содержит несколько слоев приложения spring boot полного файла jar)
+FROM openjdk:11-slim
+# добавить том, ссылающийся на каталог tmp
+VOLUME /tmp
+# скопировать распакованное приложение в новый контейнер (копирует отдельные слои из первого образа с менем build)
+ARG DEPENDENCY=/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF app/META_INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+# запустить прложение (определяет службу для запуска после создания контейнера)
+ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.optimagrowth.license.LicenseServiceApplication"]

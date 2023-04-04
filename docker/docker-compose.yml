@@ -1,0 +1,54 @@
+#  номер версии обязательно строковая переменная
+version: "0.01"
+services:
+#  Добавляет метку к каждой запущенной службе. Превращается в DNS запись для экземпляра Docker пре его запуске, и именно так к ней и обращаются другие службы
+  license-service:
+#    Обязательно полное имя образа с версией
+    image: ostock/license-service:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=DEV"
+    networks:
+      backend:
+        aliases:
+          - "licenseservise"
+
+networks:
+  backend:
+    driver: bridge
+
+
+
+
+
+
+
+            #  database:
+#    image: <database-docker-image-name>
+#    ports:
+#      - "<databasePort>:<DatabasePort>"
+#    environment:
+#      POSTGRES_USER: <databaseUser>
+#      POSTGRESPASSWORD: <databasePassword>
+
+#      POSTGRES_DB: <DATABASEnAME>
+
+
+
+
+
+
+
+#    environment:
+#      PROFILE: <profileName>
+#      DATABASESERVER_PORT: <databasePort>
+#    container_name: <container_name>
+#      networks:
+#      backend:
+#      aliases:
+#        - "alias"
+#
+#  networks:
+#    backend:
+#  driver: bridge

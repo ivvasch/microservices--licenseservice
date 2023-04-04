@@ -1,0 +1,9 @@
+# Spring еще до загрузки всех свойств прочитает этот файл
+spring:
+  application:
+    name: license-service
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8071
