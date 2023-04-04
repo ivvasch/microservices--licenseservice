@@ -3,6 +3,7 @@ package com.optimagrowth.licenseservice.service;
 import com.optimagrowth.licenseservice.configuration.ServiceConfig;
 import com.optimagrowth.licenseservice.model.License;
 import com.optimagrowth.licenseservice.repository.LicenseRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class LicenseService {
     private final LicenseRepository licenseRepository;
     private final ServiceConfig config;
 
-    public LicenseService(MessageSource messages, LicenseRepository licenseRepository, ServiceConfig config) {
+    public LicenseService(@Qualifier("messageSource") MessageSource messages, LicenseRepository licenseRepository, ServiceConfig config) {
         this.messages = messages;
         this.licenseRepository = licenseRepository;
         this.config = config;
